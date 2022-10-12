@@ -1,10 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
+import {
+  increment,
+  decrement,
+  asyncDecrement,
+  asyncIncrement,
+} from "./store/Stock.store";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.stock.counter);
+  const [addNumber, setAddNumber] = useState(1);
   return (
     <div className="App">
       <div>
@@ -15,20 +23,32 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>{count}</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={() => dispatch(increment(addNumber))}>
+          Increment
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+        <button onClick={() => dispatch(decrement(addNumber))}>
+          Decrement
+        </button>
+
+        <button onClick={() => dispatch(asyncIncrement(addNumber))}>
+          Increment Async
+        </button>
+
+        <button onClick={() => dispatch(asyncDecrement(addNumber))}>
+          Decrement Async
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input
+        placeholder="Digite um Número"
+        type="number"
+        value={addNumber}
+        onChange={(e) => setAddNumber(Number(e.target.value))}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
